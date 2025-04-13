@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.BlogController"
+            prefWidth="400" prefHeight="500">
+    <VBox spacing="10" AnchorPane.topAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+        <Label text="Titre"/>
+        <TextField fx:id="titreField"/>
+
+        <Label text="Description"/>
+        <TextArea fx:id="descriptionField" prefRowCount="3"/>
+
+        <Label text="Nombre de likes"/>
+        <TextField fx:id="nbLikesField"/>
+
+        <Label text="Image"/>
+        <TextField fx:id="imageField"/>
+        <Button text="Choisir une image" onAction="#handleImageUpload"/>
+
+        <Button text="Ajouter" onAction="#handleSubmit"/>
+    </VBox>
+</AnchorPane>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<?import javafx.scene.control.Button?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.BlogListController"
+            prefWidth="800" prefHeight="600">
+
+    <ListView fx:id="blogListView" layoutX="20.0" layoutY="20.0"
+              prefWidth="760.0" prefHeight="560.0" />
+    <Button text="Retour" fx:id="returnButton" onAction="#handleReturn"
+            layoutX="20.0" layoutY="530.0" prefWidth="760.0" />
+
+</AnchorPane>
+

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controllers.UpdateBlogController"
+      spacing="15" alignment="CENTER">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="📝 Mettre à jour un Blog" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+    <Label text="Titre" />
+    <TextField fx:id="titreField" promptText="Entrer le titre" maxWidth="300"/>
+
+    <Label text="Description" />
+    <TextArea fx:id="descriptionField" promptText="Entrer la description" maxWidth="300" prefRowCount="4"/>
+
+    <Label text="Date de création" />
+    <DatePicker fx:id="dateCreationPicker" maxWidth="300"/>
+
+    <Label text="Image (chemin local)" />
+    <TextField fx:id="imageField" promptText="Ex: C:/images/blog.jpg" maxWidth="300"/>
+
+    <Label text="Nombre de likes" />
+    <Spinner fx:id="likesSpinner" maxWidth="100"/>
+
+    <Button fx:id="updateButton" text="Mettre à jour" onAction="#handleUpdate"
+            style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold;"/>
+
+    <!-- 🔙 Le bouton retour -->
+    <Button fx:id="returnButton" text="Retour" onAction="#handleReturn"
+            style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold;"
+            maxWidth="200"/>
+</VBox>

@@ -22,6 +22,8 @@
 
     <bottom>
         <VBox spacing="10">
+            <Button text="Show Blogs List" style="-fx-font-size: 18px;" onAction="#handleShowBlogsListClick"/>
+            <Button text="Add Blog" style="-fx-font-size: 18px;" onAction="#handleAddBlogClick"/>
             <Button text="Explore Now" style="-fx-font-size: 18px;" onAction="#handleExploreClick"/>
             <Button text="Logout" style="-fx-font-size: 18px;" onAction="#handleLogoutClick"/>
         </VBox>
