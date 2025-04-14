@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.EditRemboursementController"
+            prefHeight="400.0" prefWidth="500.0"
+            style="-fx-background-color: #DBE2EF;">
+
+    <children>
+
+        <!-- 🔷 Header avec logo -->
+        <HBox spacing="10" alignment="CENTER_LEFT" layoutX="20" layoutY="20">
+            <ImageView fitHeight="35.0" fitWidth="35.0" preserveRatio="true">
+                <image>
+                    <Image url="@TuniShop_Logo.jpg" />
+                </image>
+            </ImageView>
+            <Label text="TuniShop - Edit Remboursement" style="-fx-text-fill: #112D4E;">
+                <font>
+                    <Font name="Arial Bold" size="20.0" />
+                </font>
+            </Label>
+        </HBox>
+
+        <!-- 🧾 Formulaire dans une GridPane -->
+        <GridPane layoutX="70" layoutY="100" hgap="15" vgap="15">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <!-- ID Field -->
+            <Label text="Refund ID:" GridPane.rowIndex="0" GridPane.columnIndex="0"
+                   style="-fx-text-fill: #112D4E;"/>
+            <TextField fx:id="idField"
+                       promptText="Auto-generated"
+                       editable="false"
+                       GridPane.rowIndex="0" GridPane.columnIndex="1"
+                       style="-fx-background-radius: 20px; -fx-border-radius: 20px; -fx-border-color: #3F72AF;"
+                       prefHeight="35" />
+
+            <!-- Montant -->
+            <Label text="Amount:" GridPane.rowIndex="1" GridPane.columnIndex="0"
+                   style="-fx-text-fill: #112D4E;"/>
+            <TextField fx:id="montantField"
+                       promptText="Enter amount"
+                       GridPane.rowIndex="1" GridPane.columnIndex="1"
+                       style="-fx-background-radius: 20px; -fx-border-radius: 20px; -fx-border-color: #3F72AF;"
+                       prefHeight="35" />
+
+            <!-- Mode de Remboursement -->
+            <Label text="Refund Mode:" GridPane.rowIndex="2" GridPane.columnIndex="0"
+                   style="-fx-text-fill: #112D4E;"/>
+            <TextField fx:id="modeRemboursementField"
+                       promptText="Enter mode"
+                       GridPane.rowIndex="2" GridPane.columnIndex="1"
+                       style="-fx-background-radius: 20px; -fx-border-radius: 20px; -fx-border-color: #3F72AF;"
+                       prefHeight="35" />
+
+            <!-- 🔘 Boutons -->
+            <HBox spacing="15" alignment="CENTER"
+                  GridPane.rowIndex="3" GridPane.columnIndex="1">
+
+                <Button text="Update"
+                        onAction="#handleUpdate"
+                        style="-fx-background-color: #112D4E; -fx-background-radius: 30px; -fx-text-fill: white; -fx-cursor: hand;"
+                        prefWidth="110" prefHeight="36"/>
+
+                <Button text="Delete"
+                        onAction="#handleDelete"
+                        style="-fx-background-color: #D90429; -fx-background-radius: 30px; -fx-text-fill: white; -fx-cursor: hand;"
+                        prefWidth="110" prefHeight="36"/>
+            </HBox>
+        </GridPane>
+    </children>
+</AnchorPane>

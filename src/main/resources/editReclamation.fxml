@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+<?import javafx.scene.effect.DropShadow?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.EditReclamationController"
+            prefHeight="400.0" prefWidth="500.0"
+            style="-fx-background-color: #DBE2EF;">
+
+    <children>
+
+        <!-- 🔷 Header avec logo -->
+        <HBox spacing="10" alignment="CENTER_LEFT" layoutX="20" layoutY="20">
+            <ImageView fitHeight="35.0" fitWidth="35.0" preserveRatio="true">
+                <image>
+                    <Image url="@TuniShop_Logo.jpg" />
+                </image>
+            </ImageView>
+            <Label text="TuniShop - Edit Reclamation" style="-fx-text-fill: #112D4E;">
+                <font>
+                    <Font name="Arial Bold" size="20.0" />
+                </font>
+                <effect>
+                    <DropShadow color="#3F72AF" radius="1.5" />
+                </effect>
+            </Label>
+        </HBox>
+
+        <!-- 🔧 Formulaire -->
+        <VBox spacing="20" layoutX="70" layoutY="100" prefWidth="360">
+
+            <VBox spacing="5">
+                <Label text="Reclamation ID:" style="-fx-text-fill: #112D4E;">
+                    <font><Font name="Arial" size="14"/></font>
+                </Label>
+                <TextField fx:id="idField"
+                           promptText="Enter Reclamation ID"
+                           style="-fx-background-radius: 20px; -fx-border-radius: 20px; -fx-border-color: #3F72AF;"
+                           prefHeight="35" />
+            </VBox>
+
+            <VBox spacing="5">
+                <Label text="New Reason:" style="-fx-text-fill: #112D4E;">
+                    <font><Font name="Arial" size="14"/></font>
+                </Label>
+                <TextField fx:id="raisonField"
+                           promptText="Enter new reason"
+                           style="-fx-background-radius: 20px; -fx-border-radius: 20px; -fx-border-color: #3F72AF;"
+                           prefHeight="35" />
+            </VBox>
+
+            <!-- 🔘 Boutons -->
+            <HBox spacing="20" alignment="CENTER">
+                <Button text="Update"
+                        onAction="#handleUpdate"
+                        style="-fx-background-color: #112D4E; -fx-background-radius: 30px; -fx-text-fill: white; -fx-cursor: hand;"
+                        prefWidth="120" prefHeight="38" />
+
+                <Button text="Delete"
+                        onAction="#handleDelete"
+                        style="-fx-background-color: #D90429; -fx-background-radius: 30px; -fx-text-fill: white; -fx-cursor: hand;"
+                        prefWidth="120" prefHeight="38" />
+            </HBox>
+        </VBox>
+    </children>
+</AnchorPane>

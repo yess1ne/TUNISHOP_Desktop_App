@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.ListReclamationsController"
+            prefHeight="500.0" prefWidth="850.0"
+            style="-fx-background-color: #DBE2EF;">
+
+    <children>
+
+        <!-- 🔷 Header avec logo + titre -->
+        <HBox layoutX="20" layoutY="20" spacing="10" alignment="CENTER_LEFT">
+            <ImageView fitHeight="35.0" fitWidth="35.0" preserveRatio="true">
+                <image>
+                    <Image url="@TuniShop_Logo.jpg" />
+                </image>
+            </ImageView>
+            <Label text="TuniShop - Reclamations List" style="-fx-text-fill: #112D4E;">
+                <font>
+                    <Font name="Arial Bold" size="20.0" />
+                </font>
+            </Label>
+        </HBox>
+
+        <!-- 📋 Tableau -->
+        <TableView fx:id="tableView"
+                   layoutX="25.0" layoutY="80.0"
+                   prefHeight="390.0" prefWidth="800.0"
+                   style="-fx-background-color: white; -fx-border-radius: 15px; -fx-background-radius: 15px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 4);">
+
+            <columns>
+                <TableColumn fx:id="colId" text="ID" prefWidth="60.0"/>
+                <TableColumn fx:id="colCommande" text="Order ID" prefWidth="120.0"/>
+                <TableColumn fx:id="colProduit" text="Product ID" prefWidth="120.0"/>
+                <TableColumn fx:id="colRaison" text="Reason" prefWidth="220.0"/>
+                <TableColumn fx:id="colDate" text="Date" prefWidth="140.0"/>
+                <TableColumn fx:id="colAction" text="Action" prefWidth="140.0"/>
+            </columns>
+        </TableView>
+
+    </children>
+</AnchorPane>

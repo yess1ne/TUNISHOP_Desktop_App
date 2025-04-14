@@ -14,6 +14,11 @@ public class UserService implements services.IService<User> {
 
     public UserService() {
         connection = MyDataBase.getInstance().getMyConnection();
+        if (connection == null) {
+            System.out.println("❌ Connexion à la base de données échouée dans UserService !");
+        } else {
+            System.out.println("✅ Connexion dans UserService établie !");
+        }
     }
 
     @Override
@@ -24,7 +29,6 @@ public class UserService implements services.IService<User> {
             preparedStatement.setString(2, user.getPrenom());
             preparedStatement.setString(3, user.getEmail());
 
-            // Hash the password before saving it
             String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
             preparedStatement.setString(4, hashedPassword);
 
@@ -40,29 +44,27 @@ public class UserService implements services.IService<User> {
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    int id = resultSet.getInt("id");  // Changed from 'idUser' to 'id'
+                    int id = resultSet.getInt("id");
                     String email = resultSet.getString("email");
                     String role = resultSet.getString("role");
                     String storedPasswordHash = resultSet.getString("password");
 
-                    // Debugging logs
                     System.out.println("Stored password hash: " + storedPasswordHash);
                     System.out.println("Provided password: " + user.getPassword());
 
-                    // Compare the provided password with the stored hash
                     if (BCrypt.checkpw(user.getPassword(), storedPasswordHash)) {
-                        String token = TokenManager.generateJwtToken(id, email, role);  // Changed from 'idUser' to 'id'
+                        String token = TokenManager.generateJwtToken(id, email, role);
                         TokenManager.saveToken(token);
                         return token;
                     } else {
-                        System.out.println("Password mismatch");
+                        System.out.println("❌ Mot de passe incorrect.");
                     }
                 } else {
-                    System.out.println("User not found");
+                    System.out.println("❌ Utilisateur non trouvé.");
                 }
             }
         } catch (SQLException e) {
-            throw new SQLException("Error while authenticating user", e);
+            throw new SQLException("❌ Erreur lors de l'authentification", e);
         }
         return null;
     }
@@ -96,19 +98,17 @@ public class UserService implements services.IService<User> {
         try (Statement st = connection.createStatement(); ResultSet rs = st.executeQuery(sql)) {
             while (rs.next()) {
                 User user = new User();
-                user.setId(rs.getInt("id"));  // Changed from 'idUser' to 'id'
+                user.setId(rs.getInt("id"));
                 user.setNom(rs.getString("nom"));
                 user.setPrenom(rs.getString("prenom"));
                 user.setEmail(rs.getString("email"));
                 user.setPassword(rs.getString("password"));
-                user.setRole(rs.getString("role"));  // Fetching the role here
+                user.setRole(rs.getString("role"));
                 users.add(user);
             }
         }
         return users;
     }
-
-
 
     public User fetchUser(int id) throws SQLException {
         String sql = "SELECT * FROM utilisateur WHERE id = ?";
@@ -117,12 +117,12 @@ public class UserService implements services.IService<User> {
             try (ResultSet rs = st.executeQuery()) {
                 if (rs.next()) {
                     User user = new User();
-                    user.setId(rs.getInt("id"));  // Changed from 'idUser' to 'id'
+                    user.setId(rs.getInt("id"));
                     user.setNom(rs.getString("nom"));
                     user.setPrenom(rs.getString("prenom"));
                     user.setEmail(rs.getString("email"));
                     user.setPassword(rs.getString("password"));
-                    user.setRole(rs.getString("role"));  // Fetching the role here
+                    user.setRole(rs.getString("role"));
                     return user;
                 }
             }
@@ -133,14 +133,10 @@ public class UserService implements services.IService<User> {
     public void updatePassword(String newPassword, String email) throws SQLException {
         String sql = "UPDATE utilisateur SET password = ? WHERE email = ?";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
-            // Hash the password before saving it
             String hashedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
             st.setString(1, hashedPassword);
             st.setString(2, email);
             st.executeUpdate();
         }
     }
-
-
-
 }

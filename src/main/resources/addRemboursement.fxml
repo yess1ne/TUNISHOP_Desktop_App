@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.geometry.Pos?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.AddRemboursementController"
+            prefWidth="900" prefHeight="600"
+            style="-fx-background-color: #F9F7F7;">
+
+    <!-- 🔝 HEADER -->
+    <top>
+        <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-background-color: #3F72AF;" prefHeight="70">
+            <padding><Insets top="10" left="20" bottom="10" right="20"/></padding>
+            <children>
+                <ImageView fitHeight="40" fitWidth="40" preserveRatio="true">
+                    <image>
+                        <Image url="@TuniShop_Logo.jpg"/>
+                    </image>
+                </ImageView>
+                <Label text="TuniShop - Add Remboursement" style="-fx-text-fill: white;">
+                    <font><Font name="Arial Bold" size="22"/></font>
+                </Label>
+            </children>
+        </HBox>
+    </top>
+
+
+    <!-- 📂 SIDEBAR -->
+    <left>
+        <VBox spacing="20" alignment="TOP_CENTER" style="-fx-background-color: #DBE2EF;" prefWidth="200">
+            <padding><Insets top="30" left="10" right="10" bottom="20"/></padding>
+            <children>
+                <Button text="🏠 Home" prefWidth="160" style="-fx-background-radius: 20; -fx-background-color: #3F72AF; -fx-text-fill: white;"/>
+                <Button text="➕ Add Reclamation" prefWidth="160" style="-fx-background-radius: 20;"/>
+                <Button text="📋 Show Reclamations" prefWidth="160" style="-fx-background-radius: 20;"/>
+                <Button text="💰 Add claim"      onAction="#handleGoToAddReclamation" prefWidth="160" style="-fx-background-radius: 20;"/>
+            </children>
+        </VBox>
+    </left>
+
+    <!-- 📄 MAIN CONTENT -->
+    <center>
+        <VBox spacing="30" alignment="TOP_CENTER">
+            <padding><Insets top="60" left="50" right="50" bottom="40"/></padding>
+            <children>
+
+                <Label text="Remboursement Form" style="-fx-text-fill: #112D4E;">
+                    <font><Font name="Arial Bold" size="20"/></font>
+                </Label>
+
+                <VBox spacing="20" alignment="CENTER_LEFT" prefWidth="450">
+
+                    <VBox spacing="5">
+                        <Label text="id_claim:" style="-fx-text-fill: #112D4E;">
+                            <font><Font name="Arial" size="14"/></font>
+                        </Label>
+                        <ComboBox fx:id="idReclamationComboBox" prefWidth="200" />
+
+                    </VBox>
+
+                    <VBox spacing="5">
+                        <Label text="Amount:" style="-fx-text-fill: #112D4E;">
+                            <font><Font name="Arial" size="14"/></font>
+                        </Label>
+                        <TextField fx:id="montantField"
+                                   promptText="Enter Amount"
+                                   style="-fx-background-radius: 12px; -fx-border-radius: 12px; -fx-border-color: #3F72AF;"
+                                   prefHeight="35"/>
+                    </VBox>
+
+                    <VBox spacing="5">
+                        <Label text="Refund Mode:" style="-fx-text-fill: #112D4E;">
+                            <font><Font name="Arial" size="14"/></font>
+                        </Label>
+                        <TextField fx:id="modeField"
+                                   promptText="Enter Refund Mode"
+                                   style="-fx-background-radius: 12px; -fx-border-radius: 12px; -fx-border-color: #3F72AF;"
+                                   prefHeight="35"/>
+                    </VBox>
+
+                    <VBox spacing="5">
+                        <Label text="Date:" style="-fx-text-fill: #112D4E;">
+                            <font><Font name="Arial" size="14"/></font>
+                        </Label>
+                        <DatePicker fx:id="datePicker"
+                                    promptText="Select Date"
+                                    style="-fx-background-radius: 12px; -fx-border-radius: 12px; -fx-border-color: #3F72AF;"
+                                    prefHeight="35"/>
+                    </VBox>
+
+                    <HBox spacing="20" alignment="CENTER">
+                        <Button text="Add"
+                                onAction="#handleAddRemboursement"
+                                style="-fx-background-color: #112D4E; -fx-background-radius: 25px; -fx-text-fill: white;"
+                                prefWidth="120" prefHeight="38"/>
+                        <Button text="Show"
+                                onAction="#handleShow"
+                                style="-fx-background-color: #3F72AF; -fx-background-radius: 25px; -fx-text-fill: white;"
+                                prefWidth="120" prefHeight="38"/>
+                    </HBox>
+
+                </VBox>
+
+            </children>
+        </VBox>
+    </center>
+
+    <!-- 📎 FOOTER -->
+    <bottom>
+        <HBox alignment="CENTER" style="-fx-background-color: #DBE2EF;" prefHeight="40">
+            <children>
+                <Label text="© 2025 TuniShop. All rights reserved." style="-fx-text-fill: #3F72AF;">
+                    <font><Font name="Arial" size="12"/></font>
+                </Label>
+            </children>
+        </HBox>
+    </bottom>
+
+</BorderPane>

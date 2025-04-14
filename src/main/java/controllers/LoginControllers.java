@@ -59,7 +59,7 @@ public class LoginControllers {
                 if ("ROLE_ADMIN".equals(userRole)) {
                     loadFXML("/adminDashboard.fxml");  // Admin dashboard
                 } else if ("ROLE_BUYER".equals(userRole)) {
-                    loadFXML("/home.fxml");  // Home page for buyer
+                    loadFXML("/addReclamation.fxml");  // Home page for buyer
                 } else if ("ROLE_SELLER".equals(userRole)) {
                     loadFXML("/sellerPage.fxml");  // Seller page
                 } else {
