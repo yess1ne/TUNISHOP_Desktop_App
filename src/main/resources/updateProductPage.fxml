@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Pos?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.UpdateProductPageController"
+            prefWidth="800" prefHeight="800" style="-fx-background-color: #ffffff;">
+    <VBox alignment="TOP_CENTER" spacing="15" AnchorPane.topAnchor="30.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0">
+
+        <Label text="✏ Edit Product" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+
+        <GridPane hgap="10" vgap="10" style="-fx-padding: 20;" alignment="CENTER">
+            <Label text="Title" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <TextField fx:id="titleField" promptText="Enter title" GridPane.rowIndex="0" GridPane.columnIndex="1" prefWidth="400"/>
+
+            <Label text="Price (DT)" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <TextField fx:id="priceField" promptText="Enter price" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+            <Label text="Description" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <TextArea fx:id="descriptionField" promptText="Enter description" prefHeight="100"
+                      GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+            <Label text="Category" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <TextField fx:id="categoryField" promptText="Enter category" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+            <Label text="Location" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+            <TextField fx:id="locationField" promptText="Enter location" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+            <Label text="Quantity" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+            <TextField fx:id="quantityField" promptText="Enter quantity" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+            <Label text="Image" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+            <HBox spacing="10" GridPane.rowIndex="6" GridPane.columnIndex="1">
+                <Button text="Choisir un fichier" onAction="#handleImageUpload" />
+                <Label fx:id="imageLabel" text="Aucun fichier choisi" />
+            </HBox>
+        </GridPane>
+
+        <VBox spacing="5" alignment="CENTER">
+            <Label text="Current image:"/>
+            <ImageView fx:id="currentImageView" fitWidth="250" fitHeight="180" preserveRatio="true" />
+        </VBox>
+
+        <Button text="Save Changes" onAction="#handleUpdateProduct"
+                style="-fx-background-color: #2563eb; -fx-text-fill: white; -fx-padding: 8 20; -fx-font-weight: bold;" />
+
+        <Hyperlink text="Back to Product List" onAction="#goBackToList"
+                   style="-fx-text-fill: #1e40af; -fx-font-size: 14px;" />
+
+    </VBox>
+</AnchorPane>

@@ -32,7 +32,7 @@
                                 <Glow />
                             </effect>
                             <cursor>
-                                <Cursor fx:constant="NONE" />
+                                <Cursor fx:constant="DEFAULT" />
                             </cursor>
                         </TextField>
                         <PasswordField fx:id="passwordFx" layoutX="195.0" layoutY="283.0" prefHeight="38.0" prefWidth="210.0" promptText="password" style="-fx-background-radius: 30px;" />
