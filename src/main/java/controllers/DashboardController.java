@@ -35,13 +35,9 @@ public class DashboardController {
     @FXML
     private Button loadUsersButton;
     @FXML
-<<<<<<< HEAD
-    private Button logoutButton;  // Make sure this is linked to your FXML
-=======
     private Button logoutButton;
     @FXML
     private Button editProfileButton;  // New button for Edit Profile
->>>>>>> users
 
     private UserService userService;
 
@@ -77,12 +73,9 @@ public class DashboardController {
                 }
             }
         });
-<<<<<<< HEAD
-=======
 
         // Load Users on start
         loadUsers();
->>>>>>> users
     }
 
     @FXML
@@ -156,8 +149,6 @@ public class DashboardController {
         }
     }
 
-<<<<<<< HEAD
-=======
     // New method to open the Edit Profile page
     @FXML
     public void handleEditProfile() {
@@ -187,7 +178,6 @@ public class DashboardController {
         }
     }
 
->>>>>>> users
     private void showAlert(String title, String message, Alert.AlertType alertType) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
