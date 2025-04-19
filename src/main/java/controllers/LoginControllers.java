@@ -14,7 +14,6 @@ import midlleware.TokenManager;
 import services.UserService;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 public class LoginControllers {
 
@@ -40,8 +39,14 @@ public class LoginControllers {
 
     @FXML
     void authentifier(ActionEvent event) {
-        String enteredEmail = emailFx.getText();
-        String enteredPassword = passwordFx.getText();
+        String enteredEmail = emailFx.getText().trim();  // Trimming whitespace
+        String enteredPassword = passwordFx.getText().trim();  // Trimming whitespace
+
+        if (enteredEmail.isEmpty() || enteredPassword.isEmpty()) {
+            showAlert("Login Failed", "Email and Password cannot be empty.");
+            return;
+        }
+
         User user = new User();
         user.setEmail(enteredEmail);
         user.setPassword(enteredPassword);
@@ -70,8 +75,9 @@ public class LoginControllers {
                 System.out.println("Authentication failed. Incorrect email or password.");
                 showAlert("Login Failed", "Incorrect email or password.");
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();  // Log the exception for debugging
+            showAlert("Error", "An error occurred during authentication.");
         }
     }
 
@@ -81,7 +87,8 @@ public class LoginControllers {
             Parent root = loader.load();
             emailFx.getScene().setRoot(root);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            showAlert("Error", "An error occurred while loading the page.");
         }
     }
 

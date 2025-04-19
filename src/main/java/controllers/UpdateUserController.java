@@ -42,11 +42,11 @@ public class UpdateUserController {
     }
 
     @FXML
-    private void handleSave() {
+    private void handleSave() throws SQLException, Exception {
         // Collect new values from fields
-        String updatedFirstName = firstNameField.getText();
-        String updatedLastName = lastNameField.getText();
-        String updatedEmail = emailField.getText();
+        String updatedFirstName = firstNameField.getText().trim();  // Trim spaces
+        String updatedLastName = lastNameField.getText().trim();  // Trim spaces
+        String updatedEmail = emailField.getText().trim();  // Trim spaces
         String updatedRole = roleComboBox.getValue();
 
         // Validate fields
@@ -61,18 +61,13 @@ public class UpdateUserController {
         currentUser.setEmail(updatedEmail);
         currentUser.setRole(updatedRole);
 
-        try {
-            // Call service to update the user in the database
-            userService.modifier(currentUser);
+        // Call service to update the user in the database
+        userService.modifier(currentUser);
 
-            // Close the update window after successful update
-            Stage stage = (Stage) firstNameField.getScene().getWindow();
-            stage.close();
+        // Close the update window after successful update
+        Stage stage = (Stage) firstNameField.getScene().getWindow();
+        stage.close();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-            showError("Failed to update user. Please try again.");
-        }
     }
 
     @FXML

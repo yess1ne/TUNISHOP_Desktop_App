@@ -75,14 +75,9 @@ public class DashboardController {
 
     @FXML
     private void loadUsers() {
-        try {
-            // Fetch users from the database using UserService
-            List<User> users = userService.afficher();
-            userTable.getItems().setAll(users);  // Populate the table
-        } catch (SQLException e) {
-            e.printStackTrace();
-            showError("Failed to load users.");
-        }
+        // Fetch users from the database using UserService
+        List<User> users = userService.afficher();
+        userTable.getItems().setAll(users);  // Populate the table
     }
 
     private void updateUser(User user) {
@@ -109,14 +104,9 @@ public class DashboardController {
     }
 
     private void deleteUser(int userId) {
-        try {
-            // Delete user from the database using UserService
-            userService.supprimer(userId);
-            loadUsers();  // Reload the users after deletion
-        } catch (SQLException e) {
-            e.printStackTrace();
-            showError("Failed to delete user.");
-        }
+        // Delete user from the database using UserService
+        userService.supprimer(userId);
+        loadUsers();  // Reload the users after deletion
     }
 
     // Utility method to show an error message

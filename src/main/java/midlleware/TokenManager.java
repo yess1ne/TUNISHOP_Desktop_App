@@ -5,7 +5,6 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-
 import java.security.Key;
 import java.util.Base64;
 import java.util.prefs.Preferences;
@@ -35,7 +34,6 @@ public class TokenManager {
 
         return token;
     }
-
 
     public static void saveToken(String token) {
         Preferences prefs = Preferences.userNodeForPackage(TokenManager.class);
@@ -76,12 +74,10 @@ public class TokenManager {
                     .parseClaimsJws(token);
 
             Claims body = claimsJws.getBody();
-            Object isAdminObj = body.get("isAdmin");
+            Object isAdminObj = body.get("role");  // Check if "role" field exists
 
-            if (isAdminObj instanceof Integer) {
-                return (Integer) isAdminObj != 0;
-            } else if (isAdminObj instanceof Boolean) {
-                return (Boolean) isAdminObj;
+            if (isAdminObj != null) {
+                return "admin".equals(isAdminObj.toString());  // Check if the role is "admin"
             }
 
         } catch (Exception e) {
@@ -104,7 +100,14 @@ public class TokenManager {
                     .build()
                     .parseClaimsJws(token);
 
-            Object idObj = claimsJws.getBody().get("id");
+            Claims body = claimsJws.getBody();
+            java.util.Date expiration = body.getExpiration();
+
+            if (expiration.before(new java.util.Date())) {
+                return -1;  // Token expired
+            }
+
+            Object idObj = body.get("id");
             if (idObj != null) {
                 return (int) idObj;
             }
@@ -146,5 +149,4 @@ public class TokenManager {
         }
         return null;
     }
-
 }

@@ -35,8 +35,15 @@ public class HomeController implements Initializable {
 
     @FXML
     private ImageView cartIcon;
+
     @FXML
     private Label cartCountLabel;
+
+    @FXML
+    private Button editProfileButton;
+
+    @FXML
+    private Button logoutButton;
 
     private final ProductService productService = new ProductService();
 
@@ -46,6 +53,7 @@ public class HomeController implements Initializable {
         loadProducts();
         setCartIcon();
         cartIcon.setOnMouseClicked(e -> openCartPage());
+        editProfileButton.setOnAction(e -> handleEditProfile()); // Button action
     }
 
     private void loadAppLogo() {
@@ -53,7 +61,7 @@ public class HomeController implements Initializable {
             Image logo = new Image("/TuniShop_Logo.jpg");
             appLogo.setImage(logo);
         } catch (Exception e) {
-            System.out.println("Logo introuvable : " + e.getMessage());
+            System.out.println("Logo not found: " + e.getMessage());
         }
     }
 
@@ -100,7 +108,6 @@ public class HomeController implements Initializable {
                         -fx-padding: 8 20;
                         -fx-background-radius: 5;
                         """);
-
                 buyButton.setOnAction(e -> openCheckout(product));
 
                 Button addToCartButton = new Button("Add to Cart");
@@ -111,7 +118,6 @@ public class HomeController implements Initializable {
                         -fx-padding: 8 20;
                         -fx-background-radius: 5;
                         """);
-
                 addToCartButton.setOnAction(e -> addToCart(product));
 
                 productCard.getChildren().addAll(imageView, title, price, buyButton, addToCartButton);
@@ -119,12 +125,8 @@ public class HomeController implements Initializable {
             }
 
         } catch (Exception e) {
-            showError("Erreur lors du chargement des produits : " + e.getMessage());
+            showError("Error loading products: " + e.getMessage());
         }
-    }
-
-    public void updateCartCounter(int count) {
-        cartCountLabel.setText(String.valueOf(count));
     }
 
     private void addToCart(Products product) {
@@ -148,10 +150,10 @@ public class HomeController implements Initializable {
 
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
-            stage.setTitle("Finaliser la commande");
+            stage.setTitle("Finalize Order");
             stage.show();
         } catch (IOException e) {
-            showError("Erreur lors de l'ouverture du checkout : " + e.getMessage());
+            showError("Error opening checkout: " + e.getMessage());
         }
     }
 
@@ -166,38 +168,79 @@ public class HomeController implements Initializable {
 
             CartController.setHomeController(this);
 
-            // ✅ Injecter l'utilisateur connecté dans le panier
             User user = new User();
             user.setId(TokenManager.decodeId());
-            CartController.setCurrentUser(user); // ✅ IMPORTANT
+            CartController.setCurrentUser(user);
 
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setTitle("Shopping Cart");
             stage.show();
         } catch (IOException e) {
-            showError("Erreur lors de l'ouverture du panier : " + e.getMessage());
+            showError("Error opening cart: " + e.getMessage());
         }
     }
 
     private void showError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Erreur");
-        alert.setHeaderText("Échec de l’opération");
+        alert.setTitle("Error");
+        alert.setHeaderText("Operation Failed");
         alert.setContentText(message);
         alert.showAndWait();
     }
 
-    @FXML
-    private void handleLogout() {
-        TokenManager.clearToken();
+    public void updateCartCounter(int count) {
+        cartCountLabel.setText(String.valueOf(count));
+    }
+
+    public void handleEditProfile() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
-            Scene scene = new Scene(loader.load());
-            Stage stage = (Stage) productContainer.getScene().getWindow();
-            stage.setScene(scene);
+            int userId = TokenManager.decodeId();
+
+            if (userId == -1) {
+                showError("You are not logged in or your session has expired.");
+                return;
+            }
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/EditProfile.fxml"));
+            Parent editProfileRoot = loader.load();
+
+            // Set the user ID in the controller
+            EditProfileController editProfileController = loader.getController();
+            editProfileController.setUserId(userId);
+
+            Stage stage = new Stage();
+            stage.setTitle("Edit Profile");
+            stage.setScene(new Scene(editProfileRoot));
+            stage.show();
+
         } catch (IOException e) {
             e.printStackTrace();
+            showError("Failed to load Edit Profile page.");
+        }
+    }
+
+
+    public void handleLogout() {
+        // Clear token
+        TokenManager.clearToken();
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/login.fxml"));
+            Parent loginRoot = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Login");
+            stage.setScene(new Scene(loginRoot));
+            stage.show();
+
+            // Close current window
+            Stage currentStage = (Stage) logoutButton.getScene().getWindow();
+            currentStage.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showError("Error during logout.");
         }
     }
 }

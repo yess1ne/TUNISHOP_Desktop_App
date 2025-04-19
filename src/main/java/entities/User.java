@@ -44,6 +44,9 @@ public class User {
         this.verificationToken = new SimpleStringProperty();
     }
 
+
+
+
     // Getters and Setters
     public int getId() {
         return id.get();
