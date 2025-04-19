@@ -33,12 +33,19 @@ public class HomeController implements Initializable {
     @FXML
     private ImageView appLogo;
 
+    @FXML
+    private ImageView cartIcon;
+    @FXML
+    private Label cartCountLabel;
+
     private final ProductService productService = new ProductService();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         loadAppLogo();
         loadProducts();
+        setCartIcon();
+        cartIcon.setOnMouseClicked(e -> openCartPage());
     }
 
     private void loadAppLogo() {
@@ -96,7 +103,18 @@ public class HomeController implements Initializable {
 
                 buyButton.setOnAction(e -> openCheckout(product));
 
-                productCard.getChildren().addAll(imageView, title, price, buyButton);
+                Button addToCartButton = new Button("Add to Cart");
+                addToCartButton.setStyle("""
+                        -fx-background-color: #34D399;
+                        -fx-text-fill: white;
+                        -fx-font-weight: bold;
+                        -fx-padding: 8 20;
+                        -fx-background-radius: 5;
+                        """);
+
+                addToCartButton.setOnAction(e -> addToCart(product));
+
+                productCard.getChildren().addAll(imageView, title, price, buyButton, addToCartButton);
                 productContainer.getChildren().add(productCard);
             }
 
@@ -105,18 +123,28 @@ public class HomeController implements Initializable {
         }
     }
 
+    public void updateCartCounter(int count) {
+        cartCountLabel.setText(String.valueOf(count));
+    }
+
+    private void addToCart(Products product) {
+        CartController.addProductToCart(product);
+        int totalItems = CartController.getCartItems().stream()
+                .mapToInt(CartController.CartItem::getQuantity)
+                .sum();
+        updateCartCounter(totalItems);
+    }
+
     private void openCheckout(Products product) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/checkout.fxml"));
             Parent root = loader.load();
 
             CheckoutController controller = loader.getController();
-            controller.setProduct(product);
-
-            // ✅ Création d’un objet User à partir de l’ID
             User user = new User();
             user.setId(TokenManager.decodeId());
-            controller.setUser(user); // ✅ méthode orientée objet
+            controller.setUser(user);
+            controller.setProduct(product);
 
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
@@ -125,6 +153,39 @@ public class HomeController implements Initializable {
         } catch (IOException e) {
             showError("Erreur lors de l'ouverture du checkout : " + e.getMessage());
         }
+    }
+
+    private void setCartIcon() {
+        cartIcon.setImage(new Image("/cart icon.png"));
+    }
+
+    private void openCartPage() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/cart.fxml"));
+            Parent root = loader.load();
+
+            CartController.setHomeController(this);
+
+            // ✅ Injecter l'utilisateur connecté dans le panier
+            User user = new User();
+            user.setId(TokenManager.decodeId());
+            CartController.setCurrentUser(user); // ✅ IMPORTANT
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Shopping Cart");
+            stage.show();
+        } catch (IOException e) {
+            showError("Erreur lors de l'ouverture du panier : " + e.getMessage());
+        }
+    }
+
+    private void showError(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Erreur");
+        alert.setHeaderText("Échec de l’opération");
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     @FXML
@@ -138,13 +199,5 @@ public class HomeController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private void showError(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Erreur");
-        alert.setHeaderText("Échec de l’opération");
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }

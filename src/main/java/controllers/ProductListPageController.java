@@ -79,9 +79,7 @@ public class ProductListPageController {
                         );
                     }
 
-                    // Boutons
-                    Button btnDetails = new Button("Show Details");
-                    btnDetails.setStyle("-fx-background-color: #17a2b8; -fx-text-fill: white;");
+
 
                     Button btnUpdate = new Button("Edit");
                     btnUpdate.setStyle("-fx-background-color: #5A78F0; -fx-text-fill: white;");
@@ -91,7 +89,7 @@ public class ProductListPageController {
                     btnDelete.setStyle("-fx-background-color: #dc3545; -fx-text-fill: white;");
                     btnDelete.setOnAction(e -> handleDeleteProduct(product));
 
-                    VBox actionsBox = new VBox(5, btnDetails, btnUpdate, btnDelete);
+                    VBox actionsBox = new VBox(5, btnUpdate, btnDelete);
                     actionsBox.setAlignment(Pos.CENTER);
 
                     // Mise en page finale

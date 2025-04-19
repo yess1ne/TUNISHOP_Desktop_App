@@ -6,7 +6,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.geometry.Pos?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.HomeController"
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.CartController"
             prefWidth="1200" prefHeight="800" style="-fx-background-color: #eeeeee;">
 
     <!-- Sidebar (Left) -->
@@ -34,27 +34,17 @@
             <ImageView fx:id="appLogo" fitHeight="35" fitWidth="35" preserveRatio="true" />
             <Label text="TUNI" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: white;" />
             <Label text="SHOP" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #5a78f0;" />
-
-            <!-- Cart Icon and Cart Item Count -->
-            <HBox spacing="10" alignment="CENTER_RIGHT">
-                <ImageView fx:id="cartIcon" fitHeight="25" fitWidth="25" preserveRatio="true" style="-fx-cursor: hand;" />
-                <Label fx:id="cartCountLabel" text="0" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;" />
-            </HBox>
         </HBox>
     </top>
 
-    <!-- Center: Product list -->
+    <!-- Center: Cart items list -->
     <center>
         <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
-            <FlowPane fx:id="productContainer"
-                      hgap="20"
-                      vgap="20"
-                      alignment="CENTER">
-                <padding>
-                    <Insets top="30" right="30" bottom="30" left="30"/>
-                </padding>
-            </FlowPane>
+            <VBox fx:id="cartContainer" spacing="10" alignment="TOP_CENTER" style="-fx-padding: 20;">
+                <!-- Cart items will be dynamically added here -->
+            </VBox>
         </ScrollPane>
     </center>
+
 
 </BorderPane>

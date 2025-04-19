@@ -31,10 +31,8 @@ public class CheckoutService implements IService<Checkout> {
             ps.setString(7, checkout.getPostalCode());
             ps.setString(8, checkout.getCountry());
 
-            // ✅ Utilisation d’un objet User
             ps.setInt(9, checkout.getUser().getId());
 
-            // ✅ Utilisation d’un objet Products (nullable)
             if (checkout.getProduit() != null) {
                 ps.setInt(10, checkout.getProduit().getId());
             } else {
@@ -59,10 +57,8 @@ public class CheckoutService implements IService<Checkout> {
             ps.setString(7, checkout.getPostalCode());
             ps.setString(8, checkout.getCountry());
 
-            // ✅ Objet user
             ps.setInt(9, checkout.getUser().getId());
 
-            // ✅ Objet produit (nullable)
             if (checkout.getProduit() != null) {
                 ps.setInt(10, checkout.getProduit().getId());
             } else {
@@ -87,7 +83,11 @@ public class CheckoutService implements IService<Checkout> {
     @Override
     public List<Checkout> afficher() throws SQLException {
         List<Checkout> list = new ArrayList<>();
-        String sql = "SELECT * FROM checkout";
+        String sql = """
+            SELECT c.*, p.title AS product_title
+            FROM checkout c
+            LEFT JOIN products p ON c.id_produit = p.id
+        """;
         try (Statement statement = connection.createStatement();
              ResultSet rs = statement.executeQuery(sql)) {
             while (rs.next()) {
@@ -98,6 +98,7 @@ public class CheckoutService implements IService<Checkout> {
                 if (rs.getObject("id_produit") != null) {
                     produit = new Products();
                     produit.setId(rs.getInt("id_produit"));
+                    produit.setTitle(rs.getString("product_title")); // 👈 Titre du produit
                 }
 
                 Checkout c = new Checkout(
@@ -121,7 +122,12 @@ public class CheckoutService implements IService<Checkout> {
     }
 
     public Checkout fetchById(int id) throws SQLException {
-        String sql = "SELECT * FROM checkout WHERE id = ?";
+        String sql = """
+            SELECT c.*, p.title AS product_title
+            FROM checkout c
+            LEFT JOIN products p ON c.id_produit = p.id
+            WHERE c.id = ?
+        """;
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
@@ -133,6 +139,7 @@ public class CheckoutService implements IService<Checkout> {
                     if (rs.getObject("id_produit") != null) {
                         produit = new Products();
                         produit.setId(rs.getInt("id_produit"));
+                        produit.setTitle(rs.getString("product_title"));
                     }
 
                     return new Checkout(
@@ -157,7 +164,12 @@ public class CheckoutService implements IService<Checkout> {
 
     public List<Checkout> getByUserId(int userId) throws SQLException {
         List<Checkout> list = new ArrayList<>();
-        String sql = "SELECT * FROM checkout WHERE id_user = ?";
+        String sql = """
+            SELECT c.*, p.title AS product_title
+            FROM checkout c
+            LEFT JOIN products p ON c.id_produit = p.id
+            WHERE c.id_user = ?
+        """;
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, userId);
             try (ResultSet rs = ps.executeQuery()) {
@@ -169,6 +181,7 @@ public class CheckoutService implements IService<Checkout> {
                     if (rs.getObject("id_produit") != null) {
                         produit = new Products();
                         produit.setId(rs.getInt("id_produit"));
+                        produit.setTitle(rs.getString("product_title")); // 👈 Titre du produit
                     }
 
                     Checkout c = new Checkout(

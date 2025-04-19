@@ -11,15 +11,18 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import midlleware.TokenManager;
 import services.CheckoutService;
+import services.PDFServiceCheckout;
 
 import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class CheckoutListController implements Initializable {
 
     @FXML
-    private ListView<Checkout> checkoutListView;
+    private ListView<Long> checkoutListView;
+
+    private Map<Long, List<Checkout>> groupedCheckouts = new HashMap<>();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -34,58 +37,62 @@ public class CheckoutListController implements Initializable {
     public void refreshCheckoutList(int userId) {
         try {
             List<Checkout> list = new CheckoutService().getByUserId(userId);
-            checkoutListView.getItems().clear();
-            checkoutListView.getItems().addAll(list);
-            checkoutListView.refresh();
+            groupedCheckouts = list.stream().collect(Collectors.groupingBy(Checkout::getCheckoutId));
+            checkoutListView.getItems().setAll(groupedCheckouts.keySet());
 
             checkoutListView.setCellFactory(param -> new ListCell<>() {
                 @Override
-                protected void updateItem(Checkout c, boolean empty) {
-                    super.updateItem(c, empty);
-                    if (empty || c == null) {
+                protected void updateItem(Long checkoutId, boolean empty) {
+                    super.updateItem(checkoutId, empty);
+                    if (empty || checkoutId == null) {
                         setGraphic(null);
                         return;
                     }
 
-                    VBox card = new VBox(10);
+                    List<Checkout> group = groupedCheckouts.get(checkoutId);
+                    Checkout representative = group.get(0);
+
+                    VBox card = new VBox(12);
                     card.setStyle("""
-                        -fx-background-color: white;
-                        -fx-background-radius: 16;
-                        -fx-border-radius: 16;
-                        -fx-border-color: #d1d5db;
+                        -fx-background-color: linear-gradient(to bottom right, #f0f4f8, #ffffff);
+                        -fx-background-radius: 14;
+                        -fx-border-color: #cbd5e1;
+                        -fx-border-radius: 14;
                         -fx-padding: 20;
-                        -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0.3, 0, 4);
+                        -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 12, 0.3, 0, 4);
                     """);
 
-                    Label name = new Label("👤 " + c.getFirstName() + " " + c.getSecondName());
-                    name.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1f2937;");
+                    Label name = new Label("👤 " + representative.getFirstName() + " " + representative.getSecondName());
+                    name.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #0f172a;");
 
-                    Label email = new Label("✉️ " + c.getEmail());
-                    email.setStyle("-fx-font-size: 16px; -fx-text-fill: #374151;");
+                    Label email = new Label("📧 " + representative.getEmail());
+                    email.setStyle("-fx-font-size: 14px; -fx-text-fill: #334155;");
 
-                    Label userInfo = new Label("🧑 Utilisateur : " + (c.getUser() != null ? c.getUser().getNom() : "inconnu"));
-                    userInfo.setStyle("-fx-font-size: 16px; -fx-text-fill: #4b5563;");
+                    Label ville = new Label("📍 Ville: " + representative.getCity() + ", " + representative.getCountry());
+                    ville.setStyle("-fx-font-size: 14px; -fx-text-fill: #334155;");
 
-                    Label productInfo = new Label("🎁 Produit : " + (c.getProduit() != null ? c.getProduit().getTitle() : "(supprimé)"));
-                    productInfo.setStyle("-fx-font-size: 16px; -fx-text-fill: #374151;");
+                    Label codePostal = new Label("🏠 Code Postal: " + representative.getPostalCode());
+                    codePostal.setStyle("-fx-font-size: 14px; -fx-text-fill: #334155;");
 
-                    Label ville = new Label("📍 Ville: " + c.getCity() + ", " + c.getCountry());
-                    ville.setStyle("-fx-font-size: 16px; -fx-text-fill: #374151;");
+                    VBox productsBox = new VBox(5);
+                    for (Checkout c : group) {
+                        String title = (c.getProduit() != null ? c.getProduit().getTitle() : "(supprimé)");
+                        Label productInfo = new Label("📦 Produit : " + title);
+                        productInfo.setStyle("-fx-font-size: 14px; -fx-text-fill: #475569;");
+                        productsBox.getChildren().add(productInfo);
+                    }
 
-                    Label codePostal = new Label("🏡 Code Postal: " + c.getPostalCode());
-                    codePostal.setStyle("-fx-font-size: 16px; -fx-text-fill: #374151;");
-
-                    Label status = new Label("⏱️ Statut: " + c.getStatus());
-                    status.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2563eb;");
+                    Label status = new Label("📅 Statut: " + representative.getStatus());
+                    status.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #16a34a;");
 
                     Button deleteBtn = new Button("🗑️ Supprimer");
                     deleteBtn.setStyle("""
-                        -fx-background-color: #ef4444;
+                        -fx-background-color: #dc2626;
                         -fx-text-fill: white;
                         -fx-font-weight: bold;
-                        -fx-font-size: 14px;
+                        -fx-font-size: 13px;
                         -fx-background-radius: 8;
-                        -fx-padding: 6 14;
+                        -fx-padding: 8 16;
                     """);
 
                     deleteBtn.setOnAction(e -> {
@@ -96,8 +103,10 @@ public class CheckoutListController implements Initializable {
                         confirm.showAndWait().ifPresent(response -> {
                             if (response == ButtonType.OK) {
                                 try {
-                                    new CheckoutService().supprimer(c.getId());
-                                    checkoutListView.getItems().remove(c);
+                                    for (Checkout c : group) {
+                                        new CheckoutService().supprimer(c.getId());
+                                    }
+                                    refreshCheckoutList(TokenManager.decodeId());
                                 } catch (Exception ex) {
                                     ex.printStackTrace();
                                     new Alert(Alert.AlertType.ERROR, "Échec de suppression").showAndWait();
@@ -108,12 +117,12 @@ public class CheckoutListController implements Initializable {
 
                     Button updateBtn = new Button("✏️ Modifier");
                     updateBtn.setStyle("""
-                        -fx-background-color: #3b82f6;
+                        -fx-background-color: #2563eb;
                         -fx-text-fill: white;
                         -fx-font-weight: bold;
-                        -fx-font-size: 14px;
+                        -fx-font-size: 13px;
                         -fx-background-radius: 8;
-                        -fx-padding: 6 14;
+                        -fx-padding: 8 16;
                     """);
 
                     updateBtn.setOnAction(e -> {
@@ -126,13 +135,9 @@ public class CheckoutListController implements Initializable {
                             stage.show();
 
                             UpdateCheckoutController controller = loader.getController();
-                            controller.setCheckout(c);
-                            controller.setParentList(checkoutListView);
+                            controller.setCheckout(representative);
 
-                            stage.setOnHidden(ev -> {
-                                checkoutListView.refresh();
-                                checkoutListView.getSelectionModel().select(c);
-                            });
+                            stage.setOnHidden(ev -> refreshCheckoutList(TokenManager.decodeId()));
 
                         } catch (Exception ex) {
                             ex.printStackTrace();
@@ -140,8 +145,27 @@ public class CheckoutListController implements Initializable {
                         }
                     });
 
-                    HBox buttons = new HBox(10, updateBtn, deleteBtn);
-                    card.getChildren().addAll(name, email, userInfo, productInfo, ville, codePostal, status, buttons);
+                    Button pdfBtn = new Button("📄 Télécharger PDF");
+                    pdfBtn.setStyle("""
+                        -fx-background-color: #10b981;
+                        -fx-text-fill: white;
+                        -fx-font-weight: bold;
+                        -fx-font-size: 13px;
+                        -fx-background-radius: 8;
+                        -fx-padding: 8 16;
+                    """);
+
+                    pdfBtn.setOnAction(e -> {
+                        try {
+                            PDFServiceCheckout.exportCommandeToPDF(group);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                            new Alert(Alert.AlertType.ERROR, "Erreur lors de la génération du PDF").showAndWait();
+                        }
+                    });
+
+                    HBox buttons = new HBox(10, updateBtn, deleteBtn, pdfBtn);
+                    card.getChildren().addAll(name, email, ville, codePostal, productsBox, status, buttons);
                     setGraphic(card);
                 }
             });

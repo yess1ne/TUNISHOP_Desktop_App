@@ -42,22 +42,20 @@
 
             </VBox>
 
-            <!-- 🟩 DÉTAILS DU PRODUIT À DROITE -->
-            <VBox spacing="15" alignment="TOP_CENTER" style="
-                -fx-padding: 30;
-                -fx-background-color: #ffffff;
-                -fx-background-radius: 10;
-                -fx-border-color: #d1d5db;
-                -fx-border-radius: 10;
-                -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 10, 0.2, 0, 2);
-            ">
-                <Label text="Détails du produit" style="-fx-font-size: 22px; -fx-font-weight: bold;" />
-                <ImageView fx:id="productImage" fitWidth="240" preserveRatio="true"/>
-                <Label fx:id="productTitle" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
-                <Label fx:id="productPrice" style="-fx-font-size: 14px;" />
-                <Label fx:id="productCategory" style="-fx-font-size: 14px;" />
-                <Label fx:id="productLocation" style="-fx-font-size: 14px;" />
-            </VBox>
+            <!-- 🟩 LISTE DES PRODUITS À DROITE -->
+            <ScrollPane fitToWidth="true" style="-fx-background-color:transparent;">
+                <VBox fx:id="productsContainer" spacing="15" alignment="TOP_CENTER" style="
+                    -fx-padding: 30;
+                    -fx-background-color: #ffffff;
+                    -fx-background-radius: 10;
+                    -fx-border-color: #d1d5db;
+                    -fx-border-radius: 10;
+                    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 10, 0.2, 0, 2);
+                ">
+                    <Label text="Résumé du Panier" style="-fx-font-size: 22px; -fx-font-weight: bold;" />
+                    <!-- Les produits seront ajoutés dynamiquement ici -->
+                </VBox>
+            </ScrollPane>
 
         </HBox>
     </center>
