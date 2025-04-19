@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.ProductListPageController"
+            prefWidth="1200" prefHeight="800"
+            style="-fx-background-color: #f8f8f8;">
+
+    <VBox spacing="15" alignment="TOP_CENTER" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20">
+        <Label text="📦 List of Products"
+               style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+
+        <Label text="✅ Products Loaded Successfully!"
+               style="-fx-text-fill: green; -fx-font-weight: bold;" />
+
+        <ListView fx:id="productListView" prefWidth="1100" prefHeight="700" />
+    </VBox>
+</AnchorPane>

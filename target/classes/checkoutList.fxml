@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.CheckoutListController"
+            prefWidth="900" prefHeight="600"
+            style="-fx-background-color: #f3f4f6;"> <!-- Fond doux gris clair -->
+
+    <VBox spacing="20" alignment="TOP_CENTER"
+          AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20">
+
+        <!-- Titre principal -->
+        <Label text="🧾 Mes Commandes"
+               style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #111827;" />
+
+        <!-- Liste stylée -->
+        <ListView fx:id="checkoutListView"
+                  prefWidth="820" prefHeight="500"
+                  style="-fx-background-color: transparent;" />
+    </VBox>
+</AnchorPane>
