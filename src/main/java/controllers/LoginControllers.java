@@ -38,6 +38,38 @@ public class LoginControllers {
     private final UserService userService = new UserService();
 
     @FXML
+    public void initialize() {
+        // Check if token exists and is valid when the application starts
+        checkTokenAndNavigate();
+    }
+
+    private void checkTokenAndNavigate() {
+        if (TokenManager.hasToken()) {
+            // If the token exists, check if it is valid and navigate accordingly
+            if (TokenManager.verifToken()) {
+                String userRole = TokenManager.getRoleFromToken();
+                switch (userRole) {
+                    case "ROLE_ADMIN":
+                        loadFXML("/adminDashboard.fxml");
+                        break;
+                    case "ROLE_BUYER":
+                        loadFXML("/home.fxml");
+                        break;
+                    case "ROLE_SELLER":
+                        loadFXML("/sellerPage.fxml");
+                        break;
+                    default:
+                        showAlert("Login Failed", "Unknown role.");
+                        break;
+                }
+            } else {
+                TokenManager.clearToken();  // Clear invalid token if it expired
+                showAlert("Login", "Session expired. Please log in again.");
+            }
+        }
+    }
+
+    @FXML
     void authentifier(ActionEvent event) {
         String enteredEmail = emailFx.getText().trim();  // Trimming whitespace
         String enteredPassword = passwordFx.getText().trim();  // Trimming whitespace

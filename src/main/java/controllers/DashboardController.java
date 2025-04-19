@@ -35,7 +35,9 @@ public class DashboardController {
     @FXML
     private Button loadUsersButton;
     @FXML
-    private Button logoutButton;  // Make sure this is linked to your FXML
+    private Button logoutButton;
+    @FXML
+    private Button editProfileButton;  // New button for Edit Profile
 
     private UserService userService;
 
@@ -71,6 +73,9 @@ public class DashboardController {
                 }
             }
         });
+
+        // Load Users on start
+        loadUsers();
     }
 
     @FXML
@@ -141,6 +146,35 @@ public class DashboardController {
         } catch (IOException e) {
             e.printStackTrace();
             showError("Failed to load login page.");
+        }
+    }
+
+    // New method to open the Edit Profile page
+    @FXML
+    public void handleEditProfile() {
+        try {
+            int userId = TokenManager.decodeId();
+
+            if (userId == -1) {
+                showError("You are not logged in or your session has expired.");
+                return;
+            }
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/EditProfile.fxml"));
+            Parent editProfileRoot = loader.load();
+
+            // Set the user ID in the controller
+            EditProfileController editProfileController = loader.getController();
+            editProfileController.setUserId(userId);
+
+            Stage stage = new Stage();
+            stage.setTitle("Edit Profile");
+            stage.setScene(new Scene(editProfileRoot));
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showError("Failed to load Edit Profile page.");
         }
     }
 

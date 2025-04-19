@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import midlleware.TokenManager;
 
 import java.io.IOException;
 
@@ -17,19 +18,48 @@ public class MainFX extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            // Load the FXML file (Login.fxml in this case)
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
-            Parent root = loader.load();  // Load the root element from the FXML file
+            // Check if there is a valid token
+            if (TokenManager.hasToken() && TokenManager.verifToken()) {
+                // If a valid token exists, navigate based on the user role
+                String userRole = TokenManager.getRoleFromToken();
+                String resourcePath = "";
 
-            // Set the scene with the loaded FXML root node
-            Scene scene = new Scene(root);
+                switch (userRole) {
+                    case "ROLE_ADMIN":
+                        resourcePath = "/adminDashboard.fxml";
+                        break;
+                    case "ROLE_BUYER":
+                        resourcePath = "/home.fxml";
+                        break;
+                    case "ROLE_SELLER":
+                        resourcePath = "/sellerPage.fxml";
+                        break;
+                    default:
+                        // If role is unknown, load the login screen
+                        resourcePath = "/Login.fxml";
+                        break;
+                }
 
-            // Set the title for the stage (window)
-            primaryStage.setTitle("TuniShop Application");
+                // Load the corresponding FXML file based on the user's role
+                FXMLLoader loader = new FXMLLoader(getClass().getResource(resourcePath));
+                Parent root = loader.load();
+                Scene scene = new Scene(root);
 
-            // Set the scene to the primary stage and show it
-            primaryStage.setScene(scene);
-            primaryStage.show();
+                primaryStage.setTitle("TuniShop Application");
+                primaryStage.setScene(scene);
+                primaryStage.show();
+
+            } else {
+                // If no valid token, load the login screen
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
+                Parent root = loader.load();
+                Scene scene = new Scene(root);
+
+                primaryStage.setTitle("TuniShop Application");
+                primaryStage.setScene(scene);
+                primaryStage.show();
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
